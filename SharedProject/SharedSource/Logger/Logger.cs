@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using System.Text;
 
-namespace CUILibs
+namespace Multicommands
 {
   public partial class Logger
   {

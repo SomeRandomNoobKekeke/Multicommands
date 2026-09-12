@@ -13,7 +13,7 @@ using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
-namespace CUILibs
+namespace Multicommands
 {
   public partial class Logger
   {
