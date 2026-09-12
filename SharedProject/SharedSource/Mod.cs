@@ -18,7 +18,17 @@ namespace Multicommands
 
       CommandManager.Commands.Add("kek", new Multicommand()
       {
-        Command = "arg1 {0} arg2 {0} arg3 {1}"
+        Command = "lol;kek;kek"
+      });
+
+      CommandManager.Commands.Add("lol", new Multicommand()
+      {
+        Command = "qwe;qwe;qwe"
+      });
+
+      CommandManager.Commands.Add("qwe", new Multicommand()
+      {
+        Command = "1;2;3"
       });
 
       DebugConsole_Patches.Add(Harmony);
@@ -30,6 +40,7 @@ namespace Multicommands
     public void Dispose()
     {
       Harmony.UnpatchSelf();
+      ConsoleInterface.RemoveAllCommands();
       CommandManager = null;
       Instance = null;
 

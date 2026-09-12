@@ -7,7 +7,7 @@ namespace Multicommands
   {
     public void Experiment()
     {
-      Logger.Log(Logger.Wrap.IEnumerable("bruh {0} wef{}wef kek {1} lol {2}".Split('{', '}')));
+
     }
   }
 }

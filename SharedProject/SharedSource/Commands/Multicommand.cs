@@ -25,6 +25,12 @@ namespace Multicommands
       return Crawler.Cycle(args, 1);
     }
 
+
+    private static RecursionBreaker RecursionBreaker = new()
+    {
+      OnBreak = () => Mod.Logger.Warning("Max recursion depth reached"),
+    };
+
     public void Execute(string[] args)
     {
       string[] parts = Command.Split('{', '}');
@@ -36,7 +42,12 @@ namespace Multicommands
           parts[i] = args.ElementAtOrDefault(index);
         }
       }
-      DebugConsole.ExecuteCommand(String.Join("", parts));
+
+      if (RecursionBreaker.TryEnter())
+      {
+        DebugConsole.ExecuteCommand(String.Join("", parts));
+      }
+      RecursionBreaker.Exit();
     }
   }
 }

@@ -8,7 +8,7 @@ namespace Multicommands
 
     public bool CanEnter { get; private set; } = true;
     public int Depth { get; private set; }
-    public int MaxDepth { get; set; } = 10;
+    public int MaxDepth { get; set; } = 2;
 
     public bool TryEnter()
     {
@@ -27,6 +27,7 @@ namespace Multicommands
     public void Exit()
     {
       Depth = Math.Max(0, Depth - 1);
+
       if (Depth == 0) CanEnter = true;
     }
   }
