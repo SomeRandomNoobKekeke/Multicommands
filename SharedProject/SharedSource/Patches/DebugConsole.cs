@@ -18,6 +18,12 @@ namespace Multicommands
       );
     }
 
+
+    private static RecursionBreaker RecursionBreaker = new()
+    {
+      OnBreak = () => Mod.Logger.Warning("Max recursion depth reached"),
+    };
+
     public static bool DebugConsole_ExecuteCommand_Prefix(string inputtedCommands)
     {
       inputtedCommands = inputtedCommands.Trim();
@@ -34,8 +40,13 @@ namespace Multicommands
         return false;
       }
 
+      bool handled = false;
+      if (RecursionBreaker.TryEnter())
+      {
+        handled = Mod.CommandManager.TryExecute(inputtedCommands);
+      }
+      RecursionBreaker.Exit();
 
-      bool handled = Mod.CommandManager.TryExecute(inputtedCommands);
       return !handled;
     }
 

@@ -14,12 +14,11 @@ namespace Multicommands
     public void Init()
     {
       Instance = this;
+      Experiment();
 
-
-      CommandManager.Commands.Add("kek", new ConsoleCommand()
+      CommandManager.Commands.Add("kek", new Multicommand()
       {
-        Action = (args) => Logger.Log($"hi {Logger.Wrap.IEnumerable(args)}"),
-        Hints = [["1", "2", "3", "4"], ["q", "w", "e", "r"]],
+        Command = "arg1 {0} arg2 {0} arg3 {1}"
       });
 
       DebugConsole_Patches.Add(Harmony);
