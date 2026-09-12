@@ -12,7 +12,7 @@ namespace Multicommands
 
   /// <summary>
   /// Call BreakTheLoop.After(10) to break potential while(true) loop anywhere
-  /// Primarily for debug
+  /// Primarily for debugging
   /// </summary>
   public static class BreakTheLoop
   {

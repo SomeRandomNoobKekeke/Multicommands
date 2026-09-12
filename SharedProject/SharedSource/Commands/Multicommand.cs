@@ -26,10 +26,7 @@ namespace Multicommands
     }
 
 
-    private static RecursionBreaker RecursionBreaker = new()
-    {
-      OnBreak = () => Mod.Logger.Warning("Max recursion depth reached"),
-    };
+
 
     public void Execute(string[] args)
     {
@@ -43,11 +40,7 @@ namespace Multicommands
         }
       }
 
-      if (RecursionBreaker.TryEnter())
-      {
-        DebugConsole.ExecuteCommand(String.Join("", parts));
-      }
-      RecursionBreaker.Exit();
+      DebugConsole.ExecuteCommand(String.Join("", parts));
     }
   }
 }

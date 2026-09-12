@@ -16,13 +16,26 @@ namespace Multicommands
         original: typeof(DebugConsole).GetMethod("AutoComplete", AccessTools.all),
         prefix: new HarmonyMethod(typeof(DebugConsole_Patches).GetMethod("DebugConsole_AutoComplete_Prefix"))
       );
+
+      Harmony.Patch(
+        original: typeof(DebugConsole).GetMethod("Update", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(DebugConsole_Patches).GetMethod("DebugConsole_Update_Postfix"))
+      );
     }
 
+    private static RecursionBreaker RecursionBreaker = new()
+    {
+      OnBreak = () => Mod.Logger.Warning("<<========  Max recursion depth reached  ========>>"),
+      MaxDepth = 100,
+    };
+
+    public static void DebugConsole_Update_Postfix() => RecursionBreaker.Reset();
     public static bool DebugConsole_ExecuteCommand_Prefix(string inputtedCommands)
     {
+      if (!RecursionBreaker.TryEnter()) return false;
+
       inputtedCommands = inputtedCommands.Trim();
 
-      BreakTheLoop.After(100);
       Mod.Logger.Log(inputtedCommands);
 
       string[] parts = inputtedCommands.Split(';');
