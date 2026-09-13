@@ -56,14 +56,18 @@ namespace Multicommands
       );
       VanillaConsoleInterface.AddCommand("save_multicommands", Save_Multicommands_Command, help: "you don't need this");
       VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
+
+#if CLIENT
       VanillaConsoleInterface.AddCommand(
         "export_multicommand",
         Export_Multicommand_Command,
         help: "to clipboard",
         getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()]
       );
+#endif
     }
 
+#if CLIENT
     public static void Export_Multicommand_Command(string[] args)
     {
       if (args.Length == 0)
@@ -84,6 +88,7 @@ namespace Multicommands
         Mod.Logger.Log($"no such command");
       }
     }
+#endif
 
     public static void Print_Multicommands_Command(string[] args)
     {

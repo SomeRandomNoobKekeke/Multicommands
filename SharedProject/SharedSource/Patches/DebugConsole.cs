@@ -33,6 +33,7 @@ namespace Multicommands
     public static bool DebugConsole_ExecuteCommand_Prefix(string inputtedCommands)
     {
       if (Mod.IsDisposed) return true; // run original
+      if (string.IsNullOrEmpty(inputtedCommands)) return false;
 
       if (!RecursionBreaker.TryEnter()) return false;
 

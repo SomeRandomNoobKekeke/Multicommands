@@ -7,7 +7,7 @@ namespace Multicommands
   {
     public static void Install()
     {
-      VanillaConsoleInterface.AddCommand("speak", Speak_Command);
+      VanillaConsoleInterface.AddCommand("speak", Speak_Command, help: "half-assed, don't use");
     }
 
     public static void Speak_Command(string[] args)
