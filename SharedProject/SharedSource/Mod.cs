@@ -18,9 +18,14 @@ namespace Multicommands
       Instance = this;
       Experiment();
 
+      CommandManager.Multicommands["c"] = new Multicommand()
+      {
+        Command = "cl_reloadlua",
+      };
+
       CommandManager.Multicommands["cqwe"] = new Multicommand()
       {
-        Command = "123",
+        Command = "qewfqwefqw",
       };
 
       ControlingCommands.Install();

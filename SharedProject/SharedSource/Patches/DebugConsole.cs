@@ -100,7 +100,20 @@ namespace Multicommands
           currentAutoCompletedCommand = command;
         }
 
-        List<Identifier> matchingCommands = new List<Identifier>();
+        List<string> matchingCommands = new();
+
+        //TODO use transpiler
+        //====================== All the added code =============================
+        foreach (var (name, multicommand) in Mod.CommandManager.Multicommands)
+        {
+          if (currentAutoCompletedCommand.Length > name.Length) { continue; }
+          if (name.StartsWith(currentAutoCompletedCommand))
+          {
+            matchingCommands.Add(name);
+          }
+        }
+        //=======================================================================
+
         foreach (DebugConsole.Command c in commands)
         {
           foreach (var name in c.Names)
@@ -108,7 +121,7 @@ namespace Multicommands
             if (currentAutoCompletedCommand.Length > name.Value.Length) { continue; }
             if (name.StartsWith(currentAutoCompletedCommand))
             {
-              matchingCommands.Add(name);
+              matchingCommands.Add(name.Value);
             }
           }
         }
@@ -120,7 +133,7 @@ namespace Multicommands
         }
 
         currentAutoCompletedIndex = MathUtils.PositiveModulo(currentAutoCompletedIndex + increment, matchingCommands.Count);
-        __result = matchingCommands[currentAutoCompletedIndex].Value;
+        __result = matchingCommands[currentAutoCompletedIndex];
         return false;
       }
     }

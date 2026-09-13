@@ -12,13 +12,10 @@ namespace Multicommands
     public static void SplitAndExecute(string command)
     {
       string[] parts = command.Split(Mod.Settings.SplitChar);
-      if (parts.Length > 1)
-      {
-        foreach (string part in parts)
-        {
 
-          DebugConsole.ExecuteCommand(part);
-        }
+      foreach (string part in parts)
+      {
+        DebugConsole.ExecuteCommand(part);
       }
     }
 
