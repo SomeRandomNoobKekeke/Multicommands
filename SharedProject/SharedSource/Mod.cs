@@ -22,7 +22,7 @@ namespace Multicommands
       Instance = this;
       Experiment();
 
-      CommandManager.Multicommands.Swap(MulticommandsRepo.Load());
+
       CommandManager.Multicommands.Changed += (newValue) =>
       {
         if (Settings.Autosave)
@@ -30,6 +30,8 @@ namespace Multicommands
           MulticommandsRepo.Save(newValue);
         }
       };
+      CommandManager.Multicommands.Swap(MulticommandsRepo.Load());
+
 
       ControlingCommands.Install();
       DebugConsole_Patches.Add(Harmony);

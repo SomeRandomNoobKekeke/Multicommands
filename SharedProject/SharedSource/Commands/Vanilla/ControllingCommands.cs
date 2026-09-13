@@ -50,11 +50,23 @@ namespace Multicommands
         """
       );
 
-      VanillaConsoleInterface.AddCommand("printmulticommands", PrintMulticommands_Command);
+      VanillaConsoleInterface.AddCommand("print_multicommands", Print_Multicommands_Command);
+      VanillaConsoleInterface.AddCommand("save_multicommands", Save_Multicommands_Command, help: "you don't need this");
+      VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
+    }
+
+    public static void Load_Multicommands_Command(string[] args)
+    {
+      Mod.CommandManager.Multicommands.Swap(Mod.MulticommandsRepo.Load());
     }
 
 
-    public static void PrintMulticommands_Command(string[] args)
+    public static void Save_Multicommands_Command(string[] args)
+    {
+      Mod.MulticommandsRepo.Save(Mod.CommandManager.Multicommands);
+    }
+
+    public static void Print_Multicommands_Command(string[] args)
     {
       foreach (var (key, command) in Mod.CommandManager.Multicommands)
       {
