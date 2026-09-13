@@ -3,7 +3,7 @@ namespace Multicommands
 {
   public class CommandManager
   {
-    public Dictionary<string, Multicommand> Multicommands { get; } = new();
+    public ReactiveDict<string, Multicommand> Multicommands { get; } = new();
 
     public bool TryExecute(string command)
     {

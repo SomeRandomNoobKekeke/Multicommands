@@ -1,12 +1,14 @@
-﻿using Barotrauma;
-using HarmonyLib;
+﻿using System.IO;
 
 namespace Multicommands
 {
   public class Settings
   {
-    public bool SplitAllCommands { get; set; } = true;
-    public char SplitChar { get; set; } = ';';
+    public bool MulticommandsFirst { get; set; } = true;
+    public bool SplitVanillaCommands { get; set; } = true;
+    public bool Autosave { get; set; } = true;
+    public char CommandSeparator { get; set; } = ';';
+    public string SavePath { get; set; } = Path.Combine("ModSettings", "MultiCommand", "MultiCommands.xml");
   }
 }
 

@@ -32,6 +32,8 @@ namespace Multicommands
     public static void DebugConsole_Update_Postfix() => RecursionBreaker.Reset();
     public static bool DebugConsole_ExecuteCommand_Prefix(string inputtedCommands)
     {
+      if (Mod.IsDisposed) return true; // run original
+
       if (!RecursionBreaker.TryEnter()) return false;
 
       inputtedCommands = inputtedCommands.Trim();
@@ -48,6 +50,8 @@ namespace Multicommands
 
     public static bool DebugConsole_AutoComplete_Replace(ref string __result, string command, int increment = 1)
     {
+      if (Mod.IsDisposed) return true; // run original
+
       string[] splitCommand = ToolBox.SplitCommand(command);
       string[] args = splitCommand.Skip(1).ToArray();
 
@@ -102,14 +106,17 @@ namespace Multicommands
 
         List<string> matchingCommands = new();
 
-        //TODO use transpiler
-        //====================== All the added code =============================
-        foreach (var (name, multicommand) in Mod.CommandManager.Multicommands)
+        //TODO just use transpiler
+        //============================ added code ===============================
+        if (Mod.Settings.MulticommandsFirst)
         {
-          if (currentAutoCompletedCommand.Length > name.Length) { continue; }
-          if (name.StartsWith(currentAutoCompletedCommand))
+          foreach (var (name, multicommand) in Mod.CommandManager.Multicommands)
           {
-            matchingCommands.Add(name);
+            if (currentAutoCompletedCommand.Length > name.Length) { continue; }
+            if (name.StartsWith(currentAutoCompletedCommand))
+            {
+              matchingCommands.Add(name);
+            }
           }
         }
         //=======================================================================
@@ -125,6 +132,20 @@ namespace Multicommands
             }
           }
         }
+
+        //============================ added code ===============================
+        if (!Mod.Settings.MulticommandsFirst)
+        {
+          foreach (var (name, multicommand) in Mod.CommandManager.Multicommands)
+          {
+            if (currentAutoCompletedCommand.Length > name.Length) { continue; }
+            if (name.StartsWith(currentAutoCompletedCommand))
+            {
+              matchingCommands.Add(name);
+            }
+          }
+        }
+        //=======================================================================
 
         if (matchingCommands.Count == 0)
         {

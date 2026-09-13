@@ -8,6 +8,7 @@ namespace Multicommands
     {
       VanillaConsoleInterface.AddCommand(
         "add", Add_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
         help:
         """
         Syntax: add multicommand part
@@ -29,6 +30,7 @@ namespace Multicommands
 
       VanillaConsoleInterface.AddCommand(
         "delete", Delete_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
         help:
         """
         Syntax: delete multicommand
@@ -38,6 +40,7 @@ namespace Multicommands
 
       VanillaConsoleInterface.AddCommand(
         "remove", Remove_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
         help:
         """
         Syntax: remove multicommand [part index]
@@ -69,25 +72,27 @@ namespace Multicommands
 
       string name = args[0];
 
-      if (!Mod.CommandManager.Multicommands.ContainsKey(name))
+      string content = "";
+      if (Mod.CommandManager.Multicommands.ContainsKey(name))
       {
-        Mod.CommandManager.Multicommands[name] = new Multicommand();
+        content = Mod.CommandManager.Multicommands[name].Command;
       }
 
-      Multicommand multicommand = Mod.CommandManager.Multicommands[name];
       string newPart = string.Join(' ', args.Skip(1));
 
-      if (multicommand.Command.Trim() == "")
+      if (content.Trim() == "")
       {
-        multicommand.Command = newPart;
+        content = newPart;
       }
       else
       {
-        multicommand.Command = string.Join(Mod.Settings.SplitChar, multicommand.Command, newPart);
+        content = string.Join(Mod.Settings.CommandSeparator, content, newPart);
       }
 
+      Mod.CommandManager.Multicommands[name] = new Multicommand(content);
+
       Mod.Logger.Log($"added part [{Logger.White(newPart)}] to [{Logger.White(name)}]");
-      Mod.Logger.Log($"{Logger.White(name)}   -   {Logger.White(multicommand.Command)}");
+      Mod.Logger.Log($"{Logger.White(name)}   -   {Logger.White(content)}");
     }
 
     public static void Create_Command(string[] args)
@@ -149,7 +154,7 @@ namespace Multicommands
 
       Multicommand multicommand = Mod.CommandManager.Multicommands[name];
 
-      string[] parts = multicommand.Command.Split(Mod.Settings.SplitChar);
+      string[] parts = multicommand.Command.Split(Mod.Settings.CommandSeparator);
 
       if (parts.Length == 1)
       {
@@ -178,9 +183,11 @@ namespace Multicommands
         }
       }
 
-      multicommand.Command = string.Join(
-        Mod.Settings.SplitChar,
-        parts.Where((part, i) => i != partToDelete).ToArray()
+      Mod.CommandManager.Multicommands[name] = new Multicommand(
+        string.Join(
+          Mod.Settings.CommandSeparator,
+          parts.Where((part, i) => i != partToDelete).ToArray()
+        )
       );
 
       Mod.Logger.Log($"removed part [{Logger.White(parts[partToDelete])}] from [{Logger.White(name)}]");

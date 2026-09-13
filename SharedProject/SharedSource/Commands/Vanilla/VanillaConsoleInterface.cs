@@ -11,7 +11,7 @@ namespace Multicommands
     public static void Execute(string command) => DebugConsole.ExecuteCommand(command);
     public static void SplitAndExecute(string command)
     {
-      string[] parts = command.Split(Mod.Settings.SplitChar);
+      string[] parts = command.Split(Mod.Settings.CommandSeparator);
 
       foreach (string part in parts)
       {
@@ -28,9 +28,9 @@ namespace Multicommands
     /// <returns> true if command was composite </returns>
     public static bool TrySplitAndExecute(string command)
     {
-      if (Mod.Settings.SplitAllCommands && !IsSpecialCommand(command))
+      if (Mod.Settings.SplitVanillaCommands && !IsSpecialCommand(command))
       {
-        string[] parts = command.Split(Mod.Settings.SplitChar);
+        string[] parts = command.Split(Mod.Settings.CommandSeparator);
         if (parts.Length > 1)
         {
           foreach (string part in parts)
