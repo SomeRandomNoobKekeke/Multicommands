@@ -6,49 +6,55 @@ namespace Multicommands
   {
     public static void Install()
     {
-      VanillaConsoleInterface.AddCommand(
-        "add", Add_Command, addToStart: false,
-        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        help:
+      // I have to use custom commands because vanilla commands just can't pass args with quotes
+      Mod.CommandManager.OtherCommands["add"] = new ConsoleCommand()
+      {
+        Action = Add_Command,
+        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        Help =
         """
         Syntax: add multicommand part
         Adds new part to the end of multicommand
         Creates it if it doesn't exist
         """
-      );
+      };
 
-      VanillaConsoleInterface.AddCommand(
-        "create", Create_Command, addToStart: false,
-        help:
+      Mod.CommandManager.OtherCommands["create"] = new ConsoleCommand()
+      {
+        Action = Create_Command,
+        Help =
         """
         Syntax: create multicommand content
         Creates new multicommand with content
         Rewrites it if it already exist
         Doesn't get splitted
         """
-      );
+      };
 
-      VanillaConsoleInterface.AddCommand(
-        "delete", Delete_Command, addToStart: false,
-        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        help:
+      Mod.CommandManager.OtherCommands["delete"] = new ConsoleCommand()
+      {
+        Action = Delete_Command,
+        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        Help =
         """
         Syntax: delete multicommand
         deletes multicommand
         """
-      );
+      };
 
-      VanillaConsoleInterface.AddCommand(
-        "remove", Remove_Command, addToStart: false,
-        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        help:
+      Mod.CommandManager.OtherCommands["remove"] = new ConsoleCommand()
+      {
+        Action = Remove_Command,
+        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        Help =
         """
         Syntax: remove multicommand [part index]
         Removes last part from multicommand
         If [part index] is specified removes that one
         If there's only 1 part then deletes the command
         """
-      );
+      };
+
 
       VanillaConsoleInterface.AddCommand("print_multicommands", Print_Multicommands_Command,
         getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()]

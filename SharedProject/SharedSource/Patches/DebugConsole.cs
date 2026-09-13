@@ -53,6 +53,18 @@ namespace Multicommands
     {
       if (Mod.IsDisposed) return true; // run original
 
+      bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
+
+      return !handled;
+
+
+
+
+
+
+
+
+
       string[] splitCommand = ToolBox.SplitCommand(command);
       string[] args = splitCommand.Skip(1).ToArray();
 
@@ -107,7 +119,7 @@ namespace Multicommands
 
         List<string> matchingCommands = new();
 
-        //TODO just use transpiler
+
         //============================ added code ===============================
         if (Mod.Settings.MulticommandsFirst)
         {
@@ -137,13 +149,22 @@ namespace Multicommands
         //============================ added code ===============================
         if (!Mod.Settings.MulticommandsFirst)
         {
-          foreach (var (name, multicommand) in Mod.CommandManager.Multicommands)
+          foreach (var (name, c) in Mod.CommandManager.Multicommands)
           {
             if (currentAutoCompletedCommand.Length > name.Length) { continue; }
             if (name.StartsWith(currentAutoCompletedCommand))
             {
               matchingCommands.Add(name);
             }
+          }
+        }
+
+        foreach (var (name, c) in Mod.CommandManager.OtherCommands)
+        {
+          if (currentAutoCompletedCommand.Length > name.Length) { continue; }
+          if (name.StartsWith(currentAutoCompletedCommand))
+          {
+            matchingCommands.Add(name);
           }
         }
         //=======================================================================
@@ -159,19 +180,6 @@ namespace Multicommands
         return false;
       }
     }
-
-
-    // public static bool DebugConsole_AutoComplete_Prefix(ref string __result, string command, int increment = 1)
-    // {
-    //   if (string.IsNullOrWhiteSpace(DebugConsole.currentAutoCompletedCommand))
-    //   {
-    //     DebugConsole.currentAutoCompletedCommand = command;
-    //   }
-
-    //   bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
-
-    //   return !handled;
-    // }
   }
 }
 

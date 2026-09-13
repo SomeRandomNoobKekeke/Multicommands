@@ -2,8 +2,6 @@
 
 namespace Multicommands
 {
-
-
   public static class VanillaConsoleInterface
   {
     public static Dictionary<string, DebugConsole.Command> Commands { get; set; } = new();
@@ -18,6 +16,8 @@ namespace Multicommands
         DebugConsole.ExecuteCommand(part);
       }
     }
+
+    public static void NewCommand(string command) => DebugConsole.NewCommand(command);
 
     public static bool IsSpecialCommand(string command)
     {
