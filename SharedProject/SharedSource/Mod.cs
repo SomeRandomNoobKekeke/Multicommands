@@ -32,11 +32,6 @@ namespace Multicommands
       Settings.Load(Path.Combine(Package.Dir, "Settings.xml"));
       // Settings.Print();
 
-      Mod.CommandManager.OtherCommands["lel"] = new ConsoleCommand()
-      {
-        Action = (args) => Logger.Log(Logger.Wrap.IEnumerable(args))
-      };
-
       CommandManager.Multicommands.Swap(MulticommandsRepo.Load());
       CommandManager.Multicommands.Changed += (newValue) =>
       {

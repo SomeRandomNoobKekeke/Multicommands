@@ -147,15 +147,6 @@ namespace Multicommands
             }
           }
         }
-
-        foreach (var (name, c) in Mod.CommandManager.OtherCommands)
-        {
-          if (currentAutoCompletedCommand.Length > name.Length) { continue; }
-          if (name.StartsWith(currentAutoCompletedCommand))
-          {
-            matchingCommands.Add(name);
-          }
-        }
         //=======================================================================
 
         if (matchingCommands.Count == 0)

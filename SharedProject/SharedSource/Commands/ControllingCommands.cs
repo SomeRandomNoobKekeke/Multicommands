@@ -6,54 +6,49 @@ namespace Multicommands
   {
     public static void Install()
     {
-      // I have to use custom commands because vanilla commands just can't pass args with quotes
-      Mod.CommandManager.OtherCommands["add"] = new ConsoleCommand()
-      {
-        Action = Add_Command,
-        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        Help =
+      VanillaConsoleInterface.AddCommand(
+        "add", Add_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        help:
         """
         Syntax: add multicommand part
         Adds new part to the end of multicommand
         Creates it if it doesn't exist
         """
-      };
+      );
 
-      Mod.CommandManager.OtherCommands["create"] = new ConsoleCommand()
-      {
-        Action = Create_Command,
-        Help =
+      VanillaConsoleInterface.AddCommand(
+        "create", Create_Command, addToStart: false,
+        help:
         """
         Syntax: create multicommand content
         Creates new multicommand with content
         Rewrites it if it already exist
         Doesn't get splitted
         """
-      };
+      );
 
-      Mod.CommandManager.OtherCommands["delete"] = new ConsoleCommand()
-      {
-        Action = Delete_Command,
-        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        Help =
+      VanillaConsoleInterface.AddCommand(
+        "delete", Delete_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        help:
         """
         Syntax: delete multicommand
         deletes multicommand
         """
-      };
+      );
 
-      Mod.CommandManager.OtherCommands["remove"] = new ConsoleCommand()
-      {
-        Action = Remove_Command,
-        GetValidArgs = () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
-        Help =
+      VanillaConsoleInterface.AddCommand(
+        "remove", Remove_Command, addToStart: false,
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()],
+        help:
         """
         Syntax: remove multicommand [part index]
         Removes last part from multicommand
         If [part index] is specified removes that one
         If there's only 1 part then deletes the command
         """
-      };
+      );
 
 
       VanillaConsoleInterface.AddCommand("print_multicommands", Print_Multicommands_Command,
@@ -118,7 +113,19 @@ namespace Multicommands
         content = Mod.CommandManager.Multicommands[name].Content;
       }
 
-      string newPart = string.Join(' ', args.Skip(1));
+      string newPart = string.Join(' ', args.Skip(1).Select(
+          //HACK vanilla commands strip args from "", so if i just join them i'll miss "" and they won't work
+          // I can't change DebugConsole.ExecuteCommand because it'll break vanilla commands
+          // I can use my fake commands, but i can't merge their autocomplete with vanilla one
+          // I'll have to unwind and rewrite that whole thing to make it work on multiple list of commands
+          // And it's not a problem for multicommands because they inherently don't have autocomplete for args
+          // But there's a hack, the only use case for "" i see is to wrap args that have spaces
+          // So i can just check if there's spaces and add "" 
+          // ...
+          // profit
+          s => s.Contains(' ') ? $"\"{s}\"" : s
+        )
+      );
 
       if (content.Trim() == "")
       {
@@ -145,7 +152,11 @@ namespace Multicommands
 
       string name = args[0];
 
-      string content = string.Join(' ', args.Skip(1));
+
+      string content = string.Join(' ', args.Skip(1).Select(
+          s => s.Contains(' ') ? $"\"{s}\"" : s //HACK
+        )
+      );
 
       Mod.CommandManager.Multicommands[name] = new Multicommand()
       {
