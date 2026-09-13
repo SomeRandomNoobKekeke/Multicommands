@@ -7,7 +7,7 @@ namespace Multicommands
     public static void Install()
     {
       VanillaConsoleInterface.AddCommand(
-        "add", Add_Command,
+        "add", Add_Command, addToStart: false,
         help:
         """
         Syntax: add multicommand part
@@ -17,7 +17,7 @@ namespace Multicommands
       );
 
       VanillaConsoleInterface.AddCommand(
-        "create", Create_Command,
+        "create", Create_Command, addToStart: false,
         help:
         """
         Syntax: create multicommand content
@@ -28,7 +28,7 @@ namespace Multicommands
       );
 
       VanillaConsoleInterface.AddCommand(
-        "delete", Delete_Command,
+        "delete", Delete_Command, addToStart: false,
         help:
         """
         Syntax: delete multicommand
@@ -37,7 +37,7 @@ namespace Multicommands
       );
 
       VanillaConsoleInterface.AddCommand(
-        "remove", Remove_Command,
+        "remove", Remove_Command, addToStart: false,
         help:
         """
         Syntax: remove multicommand [part index]
@@ -48,25 +48,6 @@ namespace Multicommands
       );
 
       VanillaConsoleInterface.AddCommand("printmulticommands", PrintMulticommands_Command);
-
-      DebugConsole.Command vanillaHelpCommand = DebugConsole.Commands.First(c => c.Names[0].Value == "help");
-      VanillaConsoleInterface.AddCommand("help", (args) =>
-      {
-        vanillaHelpCommand.Execute(args);
-
-        if (args.Length == 0)
-        {
-          Mod.Logger.Log(
-            """
-            printmulticommands   -   prints all multicommands
-            add multicommand part   -   adds part to multicommand, creates it if it doesn't exist
-            remove multicommand [index]   -   removes last part from multicommand, or [index] if specified
-            create multicommand content   -   creates new multicommand, overwrites existing  
-            delete multicommand   -   deletes multicommand
-            """
-          );
-        }
-      });
     }
 
 
