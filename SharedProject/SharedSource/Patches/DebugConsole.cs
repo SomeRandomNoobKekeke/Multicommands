@@ -48,6 +48,7 @@ namespace Multicommands
       return !handled;
     }
 
+    // https://github.com/FakeFishGames/Barotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/DebugConsole.cs#L2386
     public static bool DebugConsole_AutoComplete_Replace(ref string __result, string command, int increment = 1)
     {
       if (Mod.IsDisposed) return true; // run original

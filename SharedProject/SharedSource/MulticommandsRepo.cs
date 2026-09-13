@@ -8,9 +8,20 @@ namespace Multicommands
     public string FilePath => Mod.Settings.SavePath;
     public string Dir => Path.GetDirectoryName(FilePath);
 
+    public ReactiveDict<string, Multicommand> DefaultCommands => new()
+    {
+      ["setskills"] = Multicommand.FromParts([
+        "setskill weapons {0}",
+        "setskill medical {0}",
+        "setskill electrical {0}",
+        "setskill mechanical {0}",
+        "setskill helm {0}",
+      ])
+    };
+
     public ReactiveDict<string, Multicommand> Load()
     {
-      if (!File.Exists(FilePath)) return [];
+      if (!File.Exists(FilePath)) return DefaultCommands;
 
       XDocument xdoc = XDocument.Load(FilePath);
 
@@ -20,7 +31,7 @@ namespace Multicommands
       {
         commands[commandBlock.Name.ToString()] = new Multicommand()
         {
-          Command = string.Join(
+          Content = string.Join(
             Mod.Settings.CommandSeparator,
             commandBlock.Elements().Select(e => e.Value)
           )
@@ -40,7 +51,7 @@ namespace Multicommands
       foreach (var (name, multicommand) in commands)
       {
         XElement commandBlock = new XElement(name);
-        string[] parts = multicommand.Command.Split(Mod.Settings.CommandSeparator);
+        string[] parts = multicommand.Content.Split(Mod.Settings.CommandSeparator);
         foreach (string part in parts)
         {
           commandBlock.Add(new XElement("Command", part));

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPackage name="%ModName%">
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPackage name="Multicommands [DLC testing]" corepackage="false" modversion="1.0.0">
   <PluginInfo file="%ModDir%/PluginInfo.xml" />
 </ContentPackage>

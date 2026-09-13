@@ -27,8 +27,6 @@ namespace Multicommands
       Instance = this;
       InitBuildSpecific();
 
-      Mod.Logger.Log(Package.Dir);
-
       Experiment();
 
       Settings.Load(Path.Combine(Package.Dir, "Settings.xml"));

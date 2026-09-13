@@ -2,11 +2,16 @@
 using System.Text;
 namespace Multicommands
 {
-  public record Multicommand(string Command = "")
+  public record Multicommand(string Content = "")
   {
+    public static Multicommand FromParts(IEnumerable<string> parts)
+    {
+      return new Multicommand(string.Join(Mod.Settings.CommandSeparator, parts));
+    }
+
     public void Execute(string[] args)
     {
-      string[] parts = Command.Split('{', '}');
+      string[] parts = Content.Split('{', '}');
 
       // Replace all {0}, {1} with args
       //FIXME it can instead replace things outside } { if they look parseable to int, have no idea why would you do that though

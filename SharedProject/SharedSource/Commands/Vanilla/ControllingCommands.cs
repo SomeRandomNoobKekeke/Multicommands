@@ -55,27 +55,24 @@ namespace Multicommands
       VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
     }
 
-    public static void Multicommands_Settings_Command(string[] args)
-    {
-      Mod.CommandManager.Multicommands.Swap(Mod.MulticommandsRepo.Load());
-    }
-
     public static void Load_Multicommands_Command(string[] args)
     {
       Mod.CommandManager.Multicommands.Swap(Mod.MulticommandsRepo.Load());
+      Mod.Logger.Log("Loaded multicommands");
     }
 
 
     public static void Save_Multicommands_Command(string[] args)
     {
       Mod.MulticommandsRepo.Save(Mod.CommandManager.Multicommands);
+      Mod.Logger.Log("Saved multicommands");
     }
 
     public static void Print_Multicommands_Command(string[] args)
     {
       foreach (var (key, command) in Mod.CommandManager.Multicommands)
       {
-        Mod.Logger.Log($"{key} - {command.Command}");
+        Mod.Logger.Log($"{Logger.White(key)}   -   {Logger.White(command.Content)}");
       }
     }
 
@@ -92,7 +89,7 @@ namespace Multicommands
       string content = "";
       if (Mod.CommandManager.Multicommands.ContainsKey(name))
       {
-        content = Mod.CommandManager.Multicommands[name].Command;
+        content = Mod.CommandManager.Multicommands[name].Content;
       }
 
       string newPart = string.Join(' ', args.Skip(1));
@@ -126,7 +123,7 @@ namespace Multicommands
 
       Mod.CommandManager.Multicommands[name] = new Multicommand()
       {
-        Command = content
+        Content = content
       };
 
       Mod.Logger.Log($"{Logger.White(name)}   -   {Logger.White(content)}");
@@ -171,7 +168,7 @@ namespace Multicommands
 
       Multicommand multicommand = Mod.CommandManager.Multicommands[name];
 
-      string[] parts = multicommand.Command.Split(Mod.Settings.CommandSeparator);
+      string[] parts = multicommand.Content.Split(Mod.Settings.CommandSeparator);
 
       if (parts.Length == 1)
       {
@@ -208,7 +205,7 @@ namespace Multicommands
       );
 
       Mod.Logger.Log($"removed part [{Logger.White(parts[partToDelete])}] from [{Logger.White(name)}]");
-      Mod.Logger.Log($"{Logger.White(name)}   -   {Logger.White(multicommand.Command)}");
+      Mod.Logger.Log($"{Logger.White(name)}   -   {Logger.White(Mod.CommandManager.Multicommands[name].Content)}");
     }
   }
 }
