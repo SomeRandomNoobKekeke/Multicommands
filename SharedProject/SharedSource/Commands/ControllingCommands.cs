@@ -61,6 +61,16 @@ namespace Multicommands
       );
       VanillaConsoleInterface.AddCommand("save_multicommands", Save_Multicommands_Command, help: "you don't need this");
       VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
+
+
+      //       AddedCommands.Add(new DebugConsole.Command("speak", "", (string[] args) =>
+      // {
+      //   string msg = string.Join(" ", args);
+      //   if (msg == null || msg == "") return;
+
+      //   Character.Controlled?.Speak(msg);
+      //   DebugConsole.ExecuteCommand($"say \"{msg}\"");
+      // }));
     }
 
     public static void Print_Multicommands_Command(string[] args)

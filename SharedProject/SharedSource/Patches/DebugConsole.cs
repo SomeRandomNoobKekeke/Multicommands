@@ -53,17 +53,6 @@ namespace Multicommands
     {
       if (Mod.IsDisposed) return true; // run original
 
-      bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
-
-      return !handled;
-
-
-
-
-
-
-
-
 
       string[] splitCommand = ToolBox.SplitCommand(command);
       string[] args = splitCommand.Skip(1).ToArray();
