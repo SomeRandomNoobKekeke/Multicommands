@@ -4,7 +4,7 @@ namespace Multicommands
 {
   public class Multicommand : IConsoleCommand
   {
-    public string Command { get; set; }
+    public string Command { get; set; } = "";
 
     public string[][] Hints
     {
@@ -28,14 +28,18 @@ namespace Multicommands
 
     public void Execute(string[] args)
     {
-      // Replace all {0}, {1} with args
+
       string[] parts = Command.Split('{', '}');
 
-      for (int i = 0; i < parts.Length; i++)
+      // Replace all {0}, {1} with args
+      if (parts.Length > 1)
       {
-        if (int.TryParse(parts[i], out int index))
+        for (int i = 0; i < parts.Length; i++)
         {
-          parts[i] = args.ElementAtOrDefault(index);
+          if (int.TryParse(parts[i], out int index))
+          {
+            parts[i] = args.ElementAtOrDefault(index);
+          }
         }
       }
 

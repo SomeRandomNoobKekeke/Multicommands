@@ -18,6 +18,12 @@ namespace Multicommands
       Instance = this;
       Experiment();
 
+      CommandManager.Multicommands["cqwe"] = new Multicommand()
+      {
+        Command = "123",
+      };
+
+      ControlingCommands.Install();
       DebugConsole_Patches.Add(Harmony);
     }
     public partial void InitProjectSpecific();

@@ -2,6 +2,9 @@
 
 namespace Multicommands
 {
+  /// <summary>
+  /// Works but not used
+  /// </summary>
   public class ConsoleCommand : IConsoleCommand
   {
     public Action<string[]> Action { get; set; }

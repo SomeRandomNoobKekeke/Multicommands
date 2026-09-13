@@ -36,12 +36,10 @@ namespace Multicommands
 
       inputtedCommands = inputtedCommands.Trim();
 
-
       if (VanillaConsoleInterface.TrySplitAndExecute(inputtedCommands))
       {
         return false;
       }
-
 
       bool handled = Mod.CommandManager.TryExecute(inputtedCommands);
 
@@ -50,6 +48,11 @@ namespace Multicommands
 
     public static bool DebugConsole_AutoComplete_Prefix(ref string __result, string command, int increment = 1)
     {
+      if (string.IsNullOrWhiteSpace(DebugConsole.currentAutoCompletedCommand))
+      {
+        DebugConsole.currentAutoCompletedCommand = command;
+      }
+
       bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
 
       return !handled;

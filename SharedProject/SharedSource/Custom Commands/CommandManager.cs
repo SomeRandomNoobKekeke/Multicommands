@@ -3,7 +3,7 @@ namespace Multicommands
 {
   public class CommandManager
   {
-    public Dictionary<string, Multicommand> Commands { get; } = new();
+    public Dictionary<string, Multicommand> Multicommands { get; } = new();
 
     public bool TryExecute(string command)
     {
@@ -13,11 +13,11 @@ namespace Multicommands
       string name = parts[0];
       string[] args = parts.Skip(1).Where(arg => arg != "").ToArray();
 
-      if (!Commands.ContainsKey(name)) return false;
+      if (!Multicommands.ContainsKey(name)) return false;
 
       try
       {
-        Commands[name].Execute(args);
+        Multicommands[name].Execute(args);
       }
       catch (Exception e)
       {
@@ -29,7 +29,7 @@ namespace Multicommands
 
     private bool TryRestoreCommandName(ref string incompleteName)
     {
-      foreach (string name in Commands.Keys)
+      foreach (string name in Multicommands.Keys)
       {
         if (name.Contains(incompleteName))
         {
@@ -48,26 +48,33 @@ namespace Multicommands
       string name = parts[0];
       string[] args = parts.Skip(1).Where(arg => arg != "").ToArray();
 
-      if (!Commands.ContainsKey(name))
+      int depthChange = increment;
+      if (depthChange == 0 && command.Last() == ' ')
+      {
+        depthChange = 1;
+      }
+
+      if (!Multicommands.ContainsKey(name))
       {
         if (TryRestoreCommandName(ref name))
         {
-          __result = $"{name} ";
+          __result = name;
           return true;
         }
 
         return false;
       }
 
-      int depthChange = increment;
-      if (depthChange == 0 && (command.Last() == ' ' || args.Length == 0))
+      Mod.Logger.LogVars(depthChange, args.Length);
+
+      if (depthChange == 0 && args.Length == 0)
       {
-        depthChange = 1;
+        return false; // cycle to other commands
       }
 
       try
       {
-        string[] autocompletedArgs = Commands[name].Autocomplete(args, depthChange);
+        string[] autocompletedArgs = Multicommands[name].Autocomplete(args, depthChange);
         __result = $"{name} {string.Join(' ', autocompletedArgs)}";
       }
       catch (Exception e)
