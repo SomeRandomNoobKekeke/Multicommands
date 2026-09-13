@@ -16,8 +16,14 @@ namespace Multicommands
   {
     public static Logger Default = new Logger() { PrintFilePath = false };
 
+#if CLIENT
     public static string WrapInColor(object msg, string color) => $"‖color:{color}‖{msg}‖end‖";
     public static string White(object msg) => $"‖color:white‖{msg}‖end‖";
+#elif SERVER
+    public static string WrapInColor(object msg, string color) => msg.ToString();
+    public static string White(object msg) => msg.ToString();
+#endif
+
 
     public interface ISerializer { public string Serialize(object o); }
     public class MicroSerializer : ISerializer
