@@ -66,7 +66,11 @@ namespace Multicommands
     }
     public static void AddCommand(DebugConsole.Command command, bool addToStart = true)
     {
-      if (Commands.ContainsKey(command.Names[0].Value)) return;
+      if (DebugConsole.Commands.Any(c => c.Names[0].Value == command.Names[0].Value))
+      {
+        Mod.Logger.Warning($"Can't add [{Logger.White(command.Names[0].Value)}] command, it already exists");
+        return;
+      }
 
       Commands[command.Names[0].Value] = command;
 

@@ -41,7 +41,8 @@ namespace Multicommands
         }
       };
 
-      ControlingCommands.Install();
+      ModCommands.Install();
+      OtherCommands.Install();
       DebugConsole_Patches.Add(Harmony);
     }
     public partial void InitProjectSpecific();

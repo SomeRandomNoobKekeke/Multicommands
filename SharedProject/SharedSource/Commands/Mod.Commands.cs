@@ -1,8 +1,9 @@
 ﻿using Barotrauma;
+using Microsoft.Xna.Framework;
 
 namespace Multicommands
 {
-  public static class ControlingCommands
+  public static class ModCommands
   {
     public static void Install()
     {
@@ -50,22 +51,38 @@ namespace Multicommands
         """
       );
 
-
       VanillaConsoleInterface.AddCommand("print_multicommands", Print_Multicommands_Command,
         getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()]
       );
       VanillaConsoleInterface.AddCommand("save_multicommands", Save_Multicommands_Command, help: "you don't need this");
       VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
+      VanillaConsoleInterface.AddCommand(
+        "export_multicommand",
+        Export_Multicommand_Command,
+        help: "to clipboard",
+        getValidArgs: () => [Mod.CommandManager.Multicommands.Keys.ToArray()]
+      );
+    }
 
+    public static void Export_Multicommand_Command(string[] args)
+    {
+      if (args.Length == 0)
+      {
+        Mod.Logger.Log($"which one?");
+        return;
+      }
 
-      //       AddedCommands.Add(new DebugConsole.Command("speak", "", (string[] args) =>
-      // {
-      //   string msg = string.Join(" ", args);
-      //   if (msg == null || msg == "") return;
+      string name = args[0];
 
-      //   Character.Controlled?.Speak(msg);
-      //   DebugConsole.ExecuteCommand($"say \"{msg}\"");
-      // }));
+      if (Mod.CommandManager.Multicommands.ContainsKey(name))
+      {
+        Clipboard.SetText(Mod.CommandManager.Multicommands[name].Content);
+        Mod.Logger.Log($"command [{Logger.White(name)}] was copied to clipboard");
+      }
+      else
+      {
+        Mod.Logger.Log($"no such command");
+      }
     }
 
     public static void Print_Multicommands_Command(string[] args)
