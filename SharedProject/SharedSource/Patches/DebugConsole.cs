@@ -1,6 +1,6 @@
 ﻿using Barotrauma;
 using HarmonyLib;
-
+using static Barotrauma.DebugConsole;
 namespace Multicommands
 {
   public static class DebugConsole_Patches
@@ -14,7 +14,7 @@ namespace Multicommands
 
       Harmony.Patch(
         original: typeof(DebugConsole).GetMethod("AutoComplete", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(DebugConsole_Patches).GetMethod("DebugConsole_AutoComplete_Prefix"))
+        prefix: new HarmonyMethod(typeof(DebugConsole_Patches).GetMethod("DebugConsole_AutoComplete_Replace"))
       );
 
       Harmony.Patch(
@@ -46,17 +46,97 @@ namespace Multicommands
       return !handled;
     }
 
-    public static bool DebugConsole_AutoComplete_Prefix(ref string __result, string command, int increment = 1)
+    public static bool DebugConsole_AutoComplete_Replace(ref string __result, string command, int increment = 1)
     {
-      if (string.IsNullOrWhiteSpace(DebugConsole.currentAutoCompletedCommand))
+      string[] splitCommand = ToolBox.SplitCommand(command);
+      string[] args = splitCommand.Skip(1).ToArray();
+
+      //if an argument is given or the last character is a space, attempt to autocomplete the argument
+      if (args.Length > 0 || (splitCommand.Length > 0 && command.Last() == ' '))
       {
-        DebugConsole.currentAutoCompletedCommand = command;
+        DebugConsole.Command matchingCommand = commands.Find(c => c.Names.Contains(splitCommand[0].ToIdentifier()));
+        if (matchingCommand?.GetValidArgs == null) { __result = command; return false; }
+
+        int autoCompletedArgIndex = args.Length > 0 && command.Last() != ' ' ? args.Length - 1 : args.Length;
+
+        //get all valid arguments for the given command
+        string[][] allArgs = matchingCommand.GetValidArgs();
+        if (allArgs == null || allArgs.GetLength(0) < autoCompletedArgIndex + 1) { __result = command; return false; }
+
+        if (string.IsNullOrEmpty(currentAutoCompletedCommand))
+        {
+          currentAutoCompletedCommand = autoCompletedArgIndex > args.Length - 1 ? " " : args.Last();
+        }
+
+        //find all valid autocompletions for the given argument
+        string[] validArgs = allArgs[autoCompletedArgIndex].Where(arg =>
+            currentAutoCompletedCommand.Trim().Length <= arg.Length &&
+            arg.Substring(0, currentAutoCompletedCommand.Trim().Length).ToLower() == currentAutoCompletedCommand.Trim().ToLower()).ToArray();
+
+        // add all completions that contain the current argument, to the end of the list
+        validArgs = validArgs.Concat(allArgs[autoCompletedArgIndex].Where(arg =>
+            arg.ToLower().Contains(currentAutoCompletedCommand.Trim().ToLower()) &&
+            !validArgs.Contains(arg))).ToArray();
+
+        if (validArgs.Length == 0) { __result = command; return false; }
+
+        currentAutoCompletedIndex = MathUtils.PositiveModulo(currentAutoCompletedIndex + increment, validArgs.Length);
+        string autoCompletedArg = validArgs[currentAutoCompletedIndex];
+
+        //add quotation marks to args that contain spaces
+        if (autoCompletedArg.Contains(' ')) autoCompletedArg = '"' + autoCompletedArg + '"';
+        for (int i = 0; i < splitCommand.Length; i++)
+        {
+          if (splitCommand[i].Contains(' ')) splitCommand[i] = '"' + splitCommand[i] + '"';
+        }
+
+        __result = string.Join(" ", autoCompletedArgIndex >= args.Length ? splitCommand : splitCommand.Take(splitCommand.Length - 1)) + " " + autoCompletedArg;
+        return false;
       }
+      else
+      {
+        if (string.IsNullOrWhiteSpace(currentAutoCompletedCommand))
+        {
+          currentAutoCompletedCommand = command;
+        }
 
-      bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
+        List<Identifier> matchingCommands = new List<Identifier>();
+        foreach (DebugConsole.Command c in commands)
+        {
+          foreach (var name in c.Names)
+          {
+            if (currentAutoCompletedCommand.Length > name.Value.Length) { continue; }
+            if (name.StartsWith(currentAutoCompletedCommand))
+            {
+              matchingCommands.Add(name);
+            }
+          }
+        }
 
-      return !handled;
+        if (matchingCommands.Count == 0)
+        {
+          __result = command;
+          return false;
+        }
+
+        currentAutoCompletedIndex = MathUtils.PositiveModulo(currentAutoCompletedIndex + increment, matchingCommands.Count);
+        __result = matchingCommands[currentAutoCompletedIndex].Value;
+        return false;
+      }
     }
+
+
+    // public static bool DebugConsole_AutoComplete_Prefix(ref string __result, string command, int increment = 1)
+    // {
+    //   if (string.IsNullOrWhiteSpace(DebugConsole.currentAutoCompletedCommand))
+    //   {
+    //     DebugConsole.currentAutoCompletedCommand = command;
+    //   }
+
+    //   bool handled = Mod.CommandManager.TryAutoComplete(ref __result, command, increment);
+
+    //   return !handled;
+    // }
   }
 }
 
