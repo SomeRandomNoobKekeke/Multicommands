@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <MulticommandsFirst>true</MulticommandsFirst>
+  <SplitVanillaCommands>true</SplitVanillaCommands>
+  <Autosave>true</Autosave>
+  <CommandSeparator>;</CommandSeparator>
+  <!-- <SavePath>ModSettings/MultiCommand/MultiCommands.xml</SavePath> -->
+</Settings>

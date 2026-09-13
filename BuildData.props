@@ -3,7 +3,7 @@
     <!-- 
     IMPORTANT: Don't make use of special (ie: spaces / : ; , \ < > ?) (periods "." are good) and non-english characters in the ModName.
      -->
-    <ModName>Template</ModName>
+    <ModName>Multicommands</ModName>
     <RepositoryURL></RepositoryURL>
 
     <!-- 

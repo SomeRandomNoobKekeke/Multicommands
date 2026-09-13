@@ -11,5 +11,6 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)SharedItems.props" />
     <Compile Include="$(MSBuildThisFileDirectory)\SharedSource\**\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)\BuildSpecific\Vanilla\**\*.cs" />
   </ItemGroup>
 </Project>

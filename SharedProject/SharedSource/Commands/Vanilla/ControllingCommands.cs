@@ -55,6 +55,11 @@ namespace Multicommands
       VanillaConsoleInterface.AddCommand("load_multicommands", Load_Multicommands_Command, help: "you don't need this");
     }
 
+    public static void Multicommands_Settings_Command(string[] args)
+    {
+      Mod.CommandManager.Multicommands.Swap(Mod.MulticommandsRepo.Load());
+    }
+
     public static void Load_Multicommands_Command(string[] args)
     {
       Mod.CommandManager.Multicommands.Swap(Mod.MulticommandsRepo.Load());
