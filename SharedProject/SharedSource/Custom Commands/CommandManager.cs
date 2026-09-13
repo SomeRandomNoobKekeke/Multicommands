@@ -3,7 +3,7 @@ namespace Multicommands
 {
   public class CommandManager
   {
-    public Dictionary<string, IConsoleCommand> Commands { get; } = new();
+    public Dictionary<string, Multicommand> Commands { get; } = new();
 
     public bool TryExecute(string command)
     {

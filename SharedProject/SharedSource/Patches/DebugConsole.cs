@@ -36,19 +36,9 @@ namespace Multicommands
 
       inputtedCommands = inputtedCommands.Trim();
 
-      Mod.Logger.Log(inputtedCommands);
 
-      string[] parts = inputtedCommands.Split(';');
 
-      if (parts.Length > 1)
-      {
-        foreach (string part in parts)
-        {
-          DebugConsole.ExecuteCommand(part);
-        }
 
-        return false;
-      }
 
       bool handled = Mod.CommandManager.TryExecute(inputtedCommands);
 

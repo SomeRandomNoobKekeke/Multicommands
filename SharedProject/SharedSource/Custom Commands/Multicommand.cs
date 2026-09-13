@@ -26,10 +26,9 @@ namespace Multicommands
     }
 
 
-
-
     public void Execute(string[] args)
     {
+      // Replace all {0}, {1} with args
       string[] parts = Command.Split('{', '}');
 
       for (int i = 0; i < parts.Length; i++)
@@ -40,7 +39,7 @@ namespace Multicommands
         }
       }
 
-      DebugConsole.ExecuteCommand(String.Join("", parts));
+      VanillaConsoleInterface.SplitAndExecute(String.Join("", parts));
     }
   }
 }

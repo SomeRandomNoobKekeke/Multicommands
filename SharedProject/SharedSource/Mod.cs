@@ -10,26 +10,13 @@ namespace Multicommands
     public static CommandManager CommandManager { get; private set; } = new();
     public Harmony Harmony { get; } = new Harmony("multicommands");
 
+    public static Settings Settings { get; private set; } = new();
+
 
     public void Init()
     {
       Instance = this;
       Experiment();
-
-      CommandManager.Commands.Add("kek", new Multicommand()
-      {
-        Command = "lol;kek;kek"
-      });
-
-      CommandManager.Commands.Add("lol", new Multicommand()
-      {
-        Command = "qwe;qwe;qwe"
-      });
-
-      CommandManager.Commands.Add("qwe", new Multicommand()
-      {
-        Command = "1;2;3"
-      });
 
       DebugConsole_Patches.Add(Harmony);
     }
@@ -40,7 +27,7 @@ namespace Multicommands
     public void Dispose()
     {
       Harmony.UnpatchSelf();
-      ConsoleInterface.RemoveAllCommands();
+      VanillaConsoleInterface.RemoveAllCommands();
       CommandManager = null;
       Instance = null;
 
