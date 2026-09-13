@@ -8,19 +8,24 @@ namespace Multicommands
   {
     private static HashSet<DebugConsole.Command> AddedCommands = new();
 
-    public static bool ForceSplit { get; set; } //HACK
+
     public static void Execute(string command) => DebugConsole.ExecuteCommand(command);
     public static void SplitAndExecute(string command)
     {
-      ForceSplit = true;
-      DebugConsole.ExecuteCommand(command);
-      ForceSplit = false;
+      string[] parts = command.Split(Mod.Settings.SplitChar);
+      if (parts.Length > 1)
+      {
+        foreach (string part in parts)
+        {
+          DebugConsole.ExecuteCommand(part);
+        }
+      }
     }
 
-
+    /// <returns> true if command was composite </returns>
     public static bool TrySplitAndExecute(string command)
     {
-      if (Mod.Settings.SplitAllCommands || ForceSplit)
+      if (Mod.Settings.SplitAllCommands)
       {
         string[] parts = command.Split(Mod.Settings.SplitChar);
         if (parts.Length > 1)

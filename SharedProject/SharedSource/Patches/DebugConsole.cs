@@ -37,7 +37,10 @@ namespace Multicommands
       inputtedCommands = inputtedCommands.Trim();
 
 
-
+      if (VanillaConsoleInterface.TrySplitAndExecute(inputtedCommands))
+      {
+        return false;
+      }
 
 
       bool handled = Mod.CommandManager.TryExecute(inputtedCommands);
