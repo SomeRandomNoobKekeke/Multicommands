@@ -13,13 +13,10 @@ namespace Multicommands
     public static Logger Logger { get; private set; } = new();
     public static CommandManager CommandManager { get; private set; } = new();
 
-
-    public static Settings Settings { get; private set; } = new();
     public static MulticommandsRepo MulticommandsRepo { get; private set; } = new();
 
     public Harmony Harmony { get; } = new Harmony("multicommands");
 
-    public ContentPackage Package;
     public partial void InitBuildSpecific();
 
     public void Init()
@@ -28,9 +25,6 @@ namespace Multicommands
       InitBuildSpecific();
 
       Experiment();
-
-      Settings.Load(Path.Combine(Package.Dir, "Settings.xml"));
-      // Settings.Print();
 
       CommandManager.Multicommands.Swap(MulticommandsRepo.Load());
       CommandManager.Multicommands.Changed += (newValue) =>
@@ -57,10 +51,13 @@ namespace Multicommands
       }
     }
 
+    public partial void DisposeBuildSpecific();
+
     public void Dispose()
     {
       Harmony.UnpatchSelf();
       VanillaConsoleInterface.RemoveAllCommands();
+      DisposeBuildSpecific();
 
       DestroyStaticVars();
     }

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPackage name="Multicommands [DLC testing]" corepackage="false" modversion="1.0.0">
+<ContentPackage name="Multicommands [DLC testing]" corepackage="false" modversion="1.1.0" steamworkshopid="3800877071">
   <PluginInfo file="%ModDir%/PluginInfo.xml" />
 </ContentPackage>

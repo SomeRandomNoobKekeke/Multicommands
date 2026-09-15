@@ -3,13 +3,14 @@ using System.Xml.Linq;
 
 namespace Multicommands
 {
-  public class Settings
+  public class Settings : ISettings
   {
     public bool MulticommandsFirst { get; set; } = true;
     public bool SplitVanillaCommands { get; set; } = true;
     public bool Autosave { get; set; } = true;
     public char CommandSeparator { get; set; } = ';';
     public string SavePath { get; set; } = Path.Combine("ModSettings", "MultiCommand", "MultiCommands.xml");
+
 
     public void Print()
     {
@@ -20,9 +21,6 @@ namespace Multicommands
       Mod.Logger.LogVars(SavePath);
     }
 
-    /// <summary>
-    /// Half-assed untill barodevs add mod settings to vanilla
-    /// </summary>
     public void Load(string path)
     {
       XDocument xdoc = XDocument.Load(path);
@@ -61,6 +59,13 @@ namespace Multicommands
         }
       }
     }
+
+    public void Save()
+    {
+      // don't 
+    }
+
   }
+
 }
 

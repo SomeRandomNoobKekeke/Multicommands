@@ -6,7 +6,9 @@ namespace Multicommands
 {
   public partial class Mod : IAssemblyPlugin
   {
+    public static ISettings Settings { get; private set; } = new Settings();
     public IPluginManagementService PluginService { get; set; }
+    public ContentPackage Package;
 
     public partial void InitBuildSpecific()
     {
@@ -14,6 +16,8 @@ namespace Multicommands
       {
         throw new ExecutionEngineException("how are you running this code then?");
       }
+
+      Settings.Load(Path.Combine(Package.Dir, "Settings.xml"));
     }
     public void Initialize() => Init();
     public void OnLoadCompleted() { }
